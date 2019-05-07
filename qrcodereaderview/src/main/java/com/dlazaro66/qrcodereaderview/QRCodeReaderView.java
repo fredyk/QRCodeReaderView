@@ -58,6 +58,8 @@ public class QRCodeReaderView extends SurfaceView
     public interface OnQRCodeReadListener {
 
         void onQRCodeRead(String text, PointF[] points);
+
+        void onQRReadError();
     }
 
     private OnQRCodeReadListener mOnQRCodeReadListener;
@@ -373,7 +375,7 @@ public class QRCodeReaderView extends SurfaceView
             } catch (ChecksumException e) {
                 SimpleLog.d(TAG, "ChecksumException", e);
             } catch (NotFoundException e) {
-                SimpleLog.d(TAG, "No QR Code found");
+//                SimpleLog.d(TAG, "No QR Code found");
             } catch (FormatException e) {
                 SimpleLog.d(TAG, "FormatException", e);
             } finally {
@@ -395,6 +397,8 @@ public class QRCodeReaderView extends SurfaceView
                 final PointF[] transformedPoints =
                         transformToViewCoordinates(view, result.getResultPoints());
                 view.mOnQRCodeReadListener.onQRCodeRead(result.getText(), transformedPoints);
+            } else {
+                view.mOnQRCodeReadListener.onQRReadError();
             }
         }
 
